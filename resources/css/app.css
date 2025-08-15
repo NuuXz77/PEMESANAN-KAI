@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+/* Preline UI */
+@import "../../node_modules/preline/variants.css";
+@source "../../node_modules/preline/dist/*.js";
+
+/* Plugins */
+/* @plugin "@tailwindcss/forms"; */
+@plugin "daisyui" {
+    themes: light --default, dark --darktheme;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(14% 0.004 49.25);
+  --color-base-200: oklch(21% 0.006 56.043);
+  --color-base-300: oklch(26% 0.007 34.298);
+  --color-base-content: oklch(97% 0.001 106.424);
+  --color-secondary: oklch(27.05% 0.108 282.28);
+  --color-secondary-content: oklch(97% 0.013 17.38);
+  --color-primary: oklch(64.68% 0.213 42.59);
+  --color-primary-content: oklch(96% 0.015 12.422);
+  --color-accent: oklch(45.19% 0.202 282.69);
+  --color-accent-content: oklch(96% 0.018 272.314);
+  --color-neutral: oklch(44% 0.011 73.639);
+  --color-neutral-content: oklch(98% 0.001 106.423);
+  --color-info: oklch(60% 0.126 221.723);
+  --color-info-content: oklch(98% 0.019 200.873);
+  --color-success: oklch(64% 0.2 131.684);
+  --color-success-content: oklch(98% 0.031 120.757);
+  --color-warning: oklch(68% 0.162 75.834);
+  --color-warning-content: oklch(98% 0.026 102.212);
+  --color-error: oklch(62.71% 0.257 29.23);
+  --color-error-content: oklch(97% 0.014 343.198);
+  --color-hover: oklch(64.68% 0.213 42.59); /* same as secondary */
+  --color-hover-2: oklch(70.62% 0.169 272.44);
+  --color-active: oklch(45.19% 0.202 282.69);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0.002 247.839);
+  --color-base-200: oklch(96% 0.003 264.542);
+  --color-base-300: oklch(92% 0.006 264.531);
+  --color-base-content: oklch(21% 0.034 264.665);
+
+  /* Menyesuaikan dengan Dark Theme */
+  --color-primary: oklch(64.68% 0.213 42.59);
+  --color-primary-content: oklch(20% 0.025 42.59);
+
+  --color-secondary: oklch(47% 0.108 282.28);
+  --color-secondary-content: oklch(98% 0.002 282.28);
+
+  --color-accent: oklch(65% 0.202 282.69);
+  --color-accent-content: oklch(20% 0.025 282.69);
+
+  --color-neutral: oklch(44% 0.011 73.639);
+  --color-neutral-content: oklch(98% 0.002 73.639);
+
+  --color-info: oklch(70% 0.165 254.624);
+  --color-info-content: oklch(28% 0.091 267.935);
+
+  --color-success: oklch(77% 0.152 181.912);
+  --color-success-content: oklch(27% 0.046 192.524);
+
+  --color-warning: oklch(85% 0.162 75.834);
+  --color-warning-content: oklch(28% 0.066 53.813);
+
+  --color-error: oklch(72% 0.257 29.23);
+  --color-error-content: oklch(20% 0.025 29.23);
+
+  /* Hover & Active */
+  --color-hover: oklch(74% 0.213 42.59);
+  --color-hover-2: oklch(80% 0.169 272.44);
+  --color-active: oklch(65% 0.202 282.69);
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@property --border-angle {
+    inherits: false;
+    initial-value: 0deg;
+    syntax: '<angle>';
+}
+
+@theme {
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+@keyframes border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@theme {
+  --animate-border: border 4s linear infinite;
+}
