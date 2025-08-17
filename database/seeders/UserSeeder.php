@@ -22,9 +22,10 @@ class UserSeeder extends Seeder
             'email' => 'admin@kai.id',
             'password' => Hash::make('admin123'),
             'nik' => 1234567890123456,
-            'nomor_telp' => 6281234567890,
+            'nomor_telp' => '6281234567890', // ensure string
             'status' => 'aktif',
             'role' => 'admin',
+            'foto_profile' => 'img/admin-default.png', // dummy image path
             'tanggal_dibuat' => now()->toDateString(),
         ]);
     }

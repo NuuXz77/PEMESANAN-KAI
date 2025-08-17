@@ -7,6 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @livewireStyles
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>{{ $title ?? 'Beranda' }}</title>
 </head>
 
@@ -32,7 +33,7 @@
     </x-nav>
 
     {{-- MAIN --}}
-    <x-main with-nav full-width>
+    <x-main with-nav full-width class="fixed">
         <div class="fixed h-full w-full dark:bg-neutral-900 bg-primary">
             <div class="fixed inset-0 bg-secondary bg-[size:20px_20px] opacity-20 blur-[100px]"></div>
         </div>
@@ -59,10 +60,10 @@
 
                         <!-- Data Master -->
                         <x-menu-sub title="Data Master" icon="o-circle-stack">
-                            <x-menu-item title="Manajemen Kereta" icon="o-truck" link="/admin/trains" />
-                            <x-menu-item title="Manajemen Stasiun" icon="o-building-library" link="/admin/stations" />
-                            <x-menu-item title="Manajemen Rute" icon="o-map" link="/admin/routes" />
-                            <x-menu-item title="Manajemen Jadwal" icon="o-calendar" link="/admin/schedules" />
+                            <x-menu-item title="Manajemen Kereta" icon="o-truck" link="/admin/manajemen-kereta" />
+                            <x-menu-item title="Manajemen Stasiun" icon="o-building-library" link="/admin/manajemen-stasiun" />
+                            <x-menu-item title="Manajemen Rute" icon="o-map" link="/admin/manajemen-rute" />
+                            <x-menu-item title="Manajemen Jadwal" icon="o-calendar" link="/admin/manajemen-jadwal" />
                         </x-menu-sub>
 
                         <!-- Transaksi -->
@@ -87,6 +88,10 @@
                                 link="/admin/account/verifications" />
                             </x-menu-seb>
 
+                            <x-menu-sub title="Pengaturan" icon="o-cog-6-tooth">
+                                <x-menu-item title="Akun Saya" icon="o-user" link="####" />
+                                <livewire:auth.logout />
+                            </x-menu-sub>
                             <!-- Pengaturan -->
                             <x-menu-item title="Pengaturan Sistem" icon="o-cog" link="/admin/settings" />
 

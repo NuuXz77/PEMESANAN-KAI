@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->bigInteger('nik');
-            $table->bigInteger('nomor_telp');
+            $table->string('nomor_telp'); // ensure this is varchar
             $table->enum('status', ['aktif', 'tidak aktif'])->default('aktif');
             $table->enum('role', ['admin', 'konsumen'])->default('konsumen');
+            $table->string('foto_profile')->nullable(); // img path
             $table->date('tanggal_dibuat');
             $table->timestamps();
         });

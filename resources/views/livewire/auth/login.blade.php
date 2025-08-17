@@ -1,11 +1,13 @@
 <?php
 use Livewire\Attributes\{Layout, Title};
+use Mary\Traits\Toast;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Session;
 
 new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Component {
+    use Toast;
     public $email = '';
     public $password = '';
     public $remember;
@@ -31,6 +33,7 @@ new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Compone
                 // $this->remember,
             )
         ) {
+            $this->error('Login Gagal!',position: 'toast-bottom toast-start');
             Session::flash('error', 'Email atau password yang Anda masukkan salah.');
 
             throw ValidationException::withMessages([
@@ -38,7 +41,8 @@ new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Compone
                 'password' => ' ',
             ]);
         }
-
+        // Toast
+        $this->success('Login Berhasil!',position: 'toast-bottom toast-start');
         request()->session()->regenerate();
         $user = Auth::user();
         $user->status = 'Aktif';
@@ -61,8 +65,7 @@ new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Compone
             <div class="p-5 sm:p-6">
                 <!-- Thema and back button -->
                 <div class="flex justify-between items-center">
-                    <a href="/"
-                        class="inline-flex items-center hover:text-gray-800 ">
+                    <a href="/" class="inline-flex items-center hover:text-gray-800 ">
                         <x-icon name="c-arrow-left" label="Kembali" class="mr-1" />
                     </a>
                     <x-theme-toggle class="btn btn-circle" darkTheme="dark" lightTheme="light" class="mr-5" />
@@ -85,8 +88,8 @@ new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Compone
                     <div class="grid gap-y-3">
                         <x-input label="Email" wire:model="email" placeholder="Email..." icon="o-user"
                             hint="Masukan email" required />
-                        <x-password label="Password" hint="Masukan password" wire:model="password" placeholder="Password..." clearable
-                            required />
+                        <x-password label="Password" hint="Masukan password" wire:model="password"
+                            placeholder="Password..." clearable required />
 
                         <!-- Checkbox & Link -->
                         <div class="flex items-center justify-between text-sm">

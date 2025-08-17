@@ -30,6 +30,7 @@ class User extends Authenticatable
         'nomor_telp',
         'status',
         'role',
+        'foto_profile',
         'tanggal_dibuat',
     ];
 
