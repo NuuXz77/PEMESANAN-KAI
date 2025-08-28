@@ -9,14 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 new #[Layout('components.layouts.app')] #[Title('Manajemen Stasiun')] class extends Component {
     use WithPagination;
 
-    public $headerStations = [
-        ['key' => 'ID_Stasiun', 'label' => '#', 'class' => 'text-center', 'sortable' => false],
-        ['key' => 'Kode_Stasiun', 'label' => 'Kode Stasiun', 'class' => 'w-40'],
-        ['key' => 'nama_stasiun', 'label' => 'Nama Stasiun'],
-        ['key' => 'kota', 'label' => 'Kota', 'class' => 'w-32'],
-        ['key' => 'alamat', 'label' => 'Alamat'],
-        ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]
-    ];
+    public $headerStations = [['key' => 'ID_Stasiun', 'label' => '#', 'class' => 'text-center', 'sortable' => false], ['key' => 'Kode_Stasiun', 'label' => 'Kode Stasiun', 'class' => 'w-40'], ['key' => 'nama_stasiun', 'label' => 'Nama Stasiun'], ['key' => 'kota', 'label' => 'Kota', 'class' => 'w-32'], ['key' => 'alamat', 'label' => 'Alamat'], ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]];
 
     // Filters
     public string $search = '';
@@ -101,14 +94,16 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Stasiun')] class exte
                 ['id' => 'Semarang', 'name' => 'Semarang'],
             ]" icon="o-building-library"
                 class="select-sm" option-value="id" option-label="name" />
-            <x-button icon="o-plus" class="btn-secondary btn-circle" />
+            {{-- <x-button icon="o-plus" class="btn-secondary btn-circle" /> --}}
+            <livewire:admin.stasiun.add-stasiun/>
         </x-slot:actions>
     </x-header>
 
     <!-- 3. Tabel Stasiun -->
     <x-table :headers="$headerStations" :rows="$this->stations->items()" :sort-by="$sortBy" per-page="perPage" :per-page-values="[3, 5, 10]" @sort="sort">
         @scope('cell_ID_Stasiun', $station)
-            <div class="text-center">{{ $loop->iteration + ($this->stations->currentPage() - 1) * $this->stations->perPage() }}
+            <div class="text-center">
+                {{ $loop->iteration + ($this->stations->currentPage() - 1) * $this->stations->perPage() }}
             </div>
         @endscope
 
@@ -117,6 +112,10 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Stasiun')] class exte
                 <x-slot:trigger>
                     <x-button icon="m-ellipsis-vertical" class="btn-circle" />
                 </x-slot:trigger>
+
+                <!-- NEW: Detail (read-only) -->
+                <x-menu-item title="Detail" icon="o-eye" link="/admin/manajemen-stasiun/{{ $station->ID_Stasiun }}" />
+
                 <x-menu-item title="Edit" icon="o-pencil"
                     wire:click="$dispatch('showEditModal', { id: '{{ $station->ID_Stasiun }}' })" />
 
@@ -145,4 +144,8 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Stasiun')] class exte
             {{ $this->stations->links() }}
         </div>
     </div>
+
+    <!-- include edit & delete components so showEditModal / showDeleteModal work -->
+    <livewire:admin.stasiun.edit-stasiun />
+    <livewire:admin.stasiun.delete-stasiun />
 </div>

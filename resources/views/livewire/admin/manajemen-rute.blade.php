@@ -10,15 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends Component {
     use WithPagination;
 
-    public $headerRoutes = [
-        ['key' => 'ID_Rute', 'label' => '#', 'class' => 'text-center', 'sortable' => false],
-        ['key' => 'Kode_Rute', 'label' => 'Kode Rute', 'class' => 'w-40'],
-        ['key' => 'asal', 'label' => 'Stasiun Asal'],
-        ['key' => 'tujuan', 'label' => 'Stasiun Tujuan'],
-        ['key' => 'jarak_tempuh', 'label' => 'Jarak (km)', 'class' => 'w-24 text-right'],
-        ['key' => 'durasi', 'label' => 'Durasi', 'class' => 'w-24'],
-        ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]
-    ];
+    public $headerRoutes = [['key' => 'ID_Rute', 'label' => '#', 'class' => 'text-center', 'sortable' => false], ['key' => 'Kode_Rute', 'label' => 'Kode Rute', 'class' => 'w-40'], ['key' => 'asal', 'label' => 'Stasiun Asal'], ['key' => 'tujuan', 'label' => 'Stasiun Tujuan'], ['key' => 'jarak_tempuh', 'label' => 'Jarak (km)', 'class' => 'w-24 text-right'], ['key' => 'durasi', 'label' => 'Durasi', 'class' => 'w-24'], ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]];
 
     // Filters
     public string $search = '';
@@ -75,10 +67,10 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends
                     $q->where('Kode_Rute', 'like', '%' . $this->search . '%')
                         ->orWhere('jarak_tempuh', 'like', '%' . $this->search . '%')
                         ->orWhere('durasi', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('asal', function($q) {
+                        ->orWhereHas('asal', function ($q) {
                             $q->where('nama_stasiun', 'like', '%' . $this->search . '%');
                         })
-                        ->orWhereHas('tujuan', function($q) {
+                        ->orWhereHas('tujuan', function ($q) {
                             $q->where('nama_stasiun', 'like', '%' . $this->search . '%');
                         });
                 });
@@ -95,9 +87,11 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends
 
     public function getStationOptionsProperty()
     {
-        return Stasiun::all()->map(function ($station) {
-            return ['id' => $station->ID_Stasiun, 'name' => $station->nama_stasiun];
-        })->toArray();
+        return Stasiun::all()
+            ->map(function ($station) {
+                return ['id' => $station->ID_Stasiun, 'name' => $station->nama_stasiun];
+            })
+            ->toArray();
     }
 }; ?>
 
@@ -110,18 +104,12 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends
         <x-slot:actions>
             <x-input placeholder="Cari rute..." wire:model.live.debounce.300ms="search" icon="o-magnifying-glass"
                 class="input-sm" />
-            <x-select wire:model.live="filterAsal" placeholder="Filter Asal" :options="[
-                ['id' => '', 'name' => 'Semua Asal'],
-                ...$this->stationOptions
-            ]" icon="o-map-pin"
+            <x-select wire:model.live="filterAsal" placeholder="Filter Asal" :options="[['id' => '', 'name' => 'Semua Asal'], ...$this->stationOptions]" icon="o-map-pin"
                 class="select-sm" option-value="id" option-label="name" />
 
-            <x-select wire:model.live="filterTujuan" placeholder="Filter Tujuan" :options="[
-                ['id' => '', 'name' => 'Semua Tujuan'],
-                ...$this->stationOptions
-            ]" icon="o-flag"
+            <x-select wire:model.live="filterTujuan" placeholder="Filter Tujuan" :options="[['id' => '', 'name' => 'Semua Tujuan'], ...$this->stationOptions]" icon="o-flag"
                 class="select-sm" option-value="id" option-label="name" />
-            <x-button icon="o-plus" class="btn-secondary btn-circle" />
+            <livewire:admin.rute.add-rute />
         </x-slot:actions>
     </x-header>
 
@@ -153,6 +141,10 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends
                 <x-slot:trigger>
                     <x-button icon="m-ellipsis-vertical" class="btn-circle" />
                 </x-slot:trigger>
+                <!-- Detail (buka modal detail) -->
+                <x-menu-item title="Detail" icon="o-eye"
+                    wire:click="$dispatch('showDetailModal', { id: '{{ $route->ID_Rute }}' })" />
+
                 <x-menu-item title="Edit" icon="o-pencil"
                     wire:click="$dispatch('showEditModal', { id: '{{ $route->ID_Rute }}' })" />
 
@@ -181,4 +173,8 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Rute')] class extends
             {{ $this->routes->links() }}
         </div>
     </div>
+    <!-- Include modals/components for rute actions -->
+    <livewire:admin.rute.edit-rute />
+    <livewire:admin.rute.delete-rute />
+    <livewire:admin.rute.detail-rute />
 </div>

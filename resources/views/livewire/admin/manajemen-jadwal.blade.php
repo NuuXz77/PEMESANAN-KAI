@@ -119,9 +119,9 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Jadwal')] class exten
     <!-- 1. Header/Judul -->
     <x-header title="Manajemen Jadwal" subtitle="Kelola data jadwal perjalanan KAI" separator progress-indicator>
         <x-slot:middle class="!justify-end">
-            <x-button label="Reset Filter" wire:click="resetFilter" class="btn-ghost btn-sm" />
         </x-slot:middle>
         <x-slot:actions>
+            <x-button label="Reset Filter" wire:click="resetFilter" class="btn-ghost btn-sm" />
             <x-input placeholder="Cari jadwal..." wire:model.live.debounce.300ms="search" icon="o-magnifying-glass"
                 class="input-sm" />
             <x-select wire:model.live="filterKereta" placeholder="Filter Kereta" :options="[['id' => '', 'name' => 'Semua Kereta'], ...$this->trainOptions]" icon="o-user"
@@ -129,7 +129,7 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Jadwal')] class exten
 
             <x-select wire:model.live="filterRute" placeholder="Filter Rute" :options="[['id' => '', 'name' => 'Semua Rute'], ...$this->routeOptions]" icon="o-map"
                 class="select-sm" option-value="id" option-label="name" />
-            <x-button icon="o-plus" class="btn-secondary btn-circle" />
+            <livewire:admin.jadwal.add-jadwal />
         </x-slot:actions>
     </x-header>
 
@@ -162,6 +162,10 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Jadwal')] class exten
                 <x-slot:trigger>
                     <x-button icon="m-ellipsis-vertical" class="btn-circle" />
                 </x-slot:trigger>
+                <!-- Detail (buka modal detail) -->
+                <x-menu-item title="Detail" icon="o-eye"
+                    wire:click="$dispatch('showDetailModal', { id: '{{ $schedule->ID_Jadwal }}' })" />
+
                 <x-menu-item title="Edit" icon="o-pencil"
                     wire:click="$dispatch('showEditModal', { id: '{{ $schedule->ID_Jadwal }}' })" />
 
@@ -190,4 +194,8 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Jadwal')] class exten
             {{ $this->schedules->links() }}
         </div>
     </div>
+
+    <livewire:admin.jadwal.edit-jadwal />
+    <livewire:admin.jadwal.delete-jadwal />
+    <livewire:admin.jadwal.detail-jadwal />
 </div>

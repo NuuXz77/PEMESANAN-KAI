@@ -65,6 +65,7 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                 ->whereHas('rute', function ($query) {
                     $query->where('asal_id', $this->asal_id)->where('tujuan_id', $this->tujuan_id);
                 })
+                ->take(5)
                 ->whereDate('waktu_keberangkatan', $this->tanggal)
                 ->get()
                 ->map(function ($jadwal) {
@@ -102,39 +103,41 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
     </div>
 
     <!-- Search Bar -->
-    <form wire:submit.prevent="search"
+    <x-form wire:submit.prevent="search"
         class="bg-primary/10 rounded-xl p-4 mb-6 transition-all duration-300 hover:shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <!-- Origin Station -->
-            <div>
+            <div class="relative">
                 <x-choices-offline wire:model="asal_id" :options="$this->stasiun()" option-label="nama_stasiun"
-                    option-value="ID_Stasiun" option-description="kota" placeholder="Stasiun Asal" searchable clearable
-                    single class="w-full" />
+                    option-value="ID_Stasiun" option-description="kota" placeholder="Stasiun Asal" single clearable
+                    searchable icon="o-map-pin" class="w-full" />
             </div>
 
             <!-- Destination Station -->
-            <div>
+            <div class="relative">
                 <x-choices-offline wire:model="tujuan_id" :options="$this->stasiun()" option-label="nama_stasiun"
                     option-value="ID_Stasiun" option-description="kota" placeholder="Stasiun Tujuan" searchable
-                    clearable single class="w-full" />
+                    clearable single icon="o-flag" class="w-full" />
             </div>
 
             <!-- Date -->
-            <div>
+            <div class="relative">
                 <x-datetime wire:model="tanggal" placeholder="Tanggal Berangkat" type="date" icon="o-calendar"
                     min="{{ now()->format('Y-m-d') }}" class="w-full" />
             </div>
 
             <!-- Passenger Count -->
-            <div>
+            <div class="relative">
                 <x-input wire:model="penumpang" type="number" placeholder="Jumlah Penumpang" min="1"
                     max="10" icon="o-users" class="w-full" />
             </div>
 
             <!-- Search Button -->
             <div class="flex items-center justify-center">
-                <x-button type="submit" icon="o-magnifying-glass" class="bg-primary w-full"
-                    wire:loading.attr="disabled" wire:loading.class="loading" />
+                <x-button type="submit" icon="o-magnifying-glass" class="bg-primary w-full md:w-auto"
+                    wire:loading.attr="disabled" wire:loading.class="loading">
+                    <span class="hidden md:inline">Cari</span>
+                </x-button>
             </div>
         </div>
 
@@ -145,11 +148,14 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                 {{ $searchError }}
             </div>
         @endif
-    </form>
+    </x-form>
 
     <!-- Search Results -->
     <div class="mb-4">
-        <div class="bg-primary text-primary-content font-semibold rounded-lg px-4 py-2 text-lg">Hasil Pencarian</div>
+        <div class="bg-primary text-primary-content font-semibold rounded-lg px-4 py-2 text-lg flex items-center">
+            <x-icon name="o-list-bullet" class="w-5 h-5 mr-2" />
+            <span>Hasil Pencarian</span>
+        </div>
     </div>
 
     <div class="space-y-4">
@@ -182,7 +188,10 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                         <!-- Train Info -->
                         <div class="lg:w-2/3">
                             <div class="flex flex-col md:flex-row md:items-center gap-4 mb-2">
-                                <div class="font-bold text-primary text-lg">{{ $result['kereta']->nama_kereta }}</div>
+                                <div class="font-bold text-primary text-lg flex items-center">
+                                    <x-icon name="o-train" class="w-5 h-5 mr-2" />
+                                    {{ $result['kereta']->nama_kereta }}
+                                </div>
                                 <div
                                     class="badge badge-{{ $result['kereta']->tipe === 'Eksekutif' ? 'primary' : 'secondary' }}">
                                     {{ $result['kereta']->tipe }}
@@ -191,7 +200,10 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
                                 <div>
-                                    <div class="text-sm text-base-content/70">Keberangkatan</div>
+                                    <div class="text-sm text-base-content/70 flex items-center">
+                                        <x-icon name="o-arrow-right" class="w-4 h-4 mr-1" />
+                                        Keberangkatan
+                                    </div>
                                     <div class="font-medium">
                                         {{ $result['jadwal']->waktu_keberangkatan->format('H:i') }}
                                     </div>
@@ -200,8 +212,14 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
 
                                 <div class="flex items-center justify-center">
                                     <div class="text-center">
-                                        <div class="text-xs text-base-content/50">
-                                            {{ $result['rute']->durasi }} • {{ $result['rute']->jarak_tempuh }} km
+                                        <div class="text-xs text-base-content/50 flex items-center justify-center">
+                                            <x-icon name="o-clock" class="w-3 h-3 mr-1" />
+                                            {{ $result['rute']->durasi }}
+                                        </div>
+                                        <div class="h-px bg-base-content/20 w-full my-1"></div>
+                                        <div class="text-xs text-base-content/50 flex items-center justify-center">
+                                            <x-icon name="o-map-pin" class="w-3 h-3 mr-1" />
+                                            {{ $result['rute']->jarak_tempuh }} km
                                         </div>
                                         <div class="h-px bg-base-content/20 w-full my-1"></div>
                                         <div class="text-xs text-base-content/50">
@@ -211,7 +229,10 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                                 </div>
 
                                 <div>
-                                    <div class="text-sm text-base-content/70">Kedatangan</div>
+                                    <div class="text-sm text-base-content/70 flex items-center">
+                                        <x-icon name="o-flag" class="w-4 h-4 mr-1" />
+                                        Kedatangan
+                                    </div>
                                     <div class="font-medium">
                                         {{ $result['jadwal']->waktu_kedatangan->format('H:i') }}
                                     </div>
@@ -228,10 +249,12 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
 
                         <!-- Price & Button -->
                         <div class="lg:w-1/3 mt-4 lg:mt-0 lg:pl-8 lg:text-right">
-                            <div class="font-bold text-warning text-xl mb-2">
+                            <div class="font-bold text-warning text-xl mb-2 flex items-center justify-end">
+                                <x-icon name="o-banknotes" class="w-5 h-5 mr-1" />
                                 Rp {{ number_format($result['harga'], 0, ',', '.') }}
                             </div>
-                            <button class="btn btn-primary btn-sm w-full lg:w-auto" @click="showDetails = !showDetails">
+                            <button class="btn btn-primary btn-sm w-full lg:w-auto"
+                                @click="showDetails = !showDetails">
                                 <x-icon name="o-eye" class="w-4 h-4 mr-1" />
                                 <span>Detail</span>
                             </button>
@@ -242,7 +265,10 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                     <div class="w-full mt-4 pt-4 border-t border-base-content/10" x-show="showDetails" x-transition>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
-                                <h3 class="font-semibold mb-3 text-lg">Informasi Kereta</h3>
+                                <h3 class="font-semibold mb-3 text-lg flex items-center">
+                                    <x-icon name="o-information-circle" class="w-5 h-5 mr-2" />
+                                    Informasi Kereta
+                                </h3>
                                 <ul class="space-y-2 text-base">
                                     <li class="flex items-center gap-3">
                                         <x-icon name="o-ticket" class="w-5 h-5" />
@@ -256,7 +282,10 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
                             </div>
 
                             <div>
-                                <h3 class="font-semibold mb-3 text-lg">Informasi Rute</h3>
+                                <h3 class="font-semibold mb-3 text-lg flex items-center">
+                                    <x-icon name="o-map" class="w-5 h-5 mr-2" />
+                                    Informasi Rute
+                                </h3>
                                 <ul class="space-y-2 text-base">
                                     <li class="flex items-center gap-3">
                                         <x-icon name="o-map-pin" class="w-5 h-5" />
@@ -289,4 +318,23 @@ new #[Layout('components.layouts.app')] #[Title('Dashboard')] class extends Comp
             @endforeach
         @endif
     </div>
+
+    <style>
+        /* Fix untuk x-choices agar tidak memanjang ke bawah */
+        [x-choices] {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Responsivitas tambahan */
+        @media (max-width: 768px) {
+            .md\:grid-cols-5 {
+                grid-template-columns: 1fr;
+            }
+
+            .flex.items-center.justify-center {
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
 </div>

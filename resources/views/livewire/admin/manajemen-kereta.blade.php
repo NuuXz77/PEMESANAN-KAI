@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 new #[Layout('components.layouts.app')] #[Title('Manajemen Kereta')] class extends Component {
     use WithPagination;
 
-    public $headerTrains = [['key' => 'ID_Kereta', 'label' => '#', 'class' => 'text-center', 'sortable' => false], ['key' => 'Kode_Kereta', 'label' => 'Kode Kereta', 'class' => 'w-40'], ['key' => 'nama_kereta', 'label' => 'Nama Kereta'], ['key' => 'tipe', 'label' => 'Tipe', 'class' => 'w-32'], ['key' => 'kapasitas', 'label' => 'Kapasitas', 'class' => 'w-24 text-right'], ['key' => 'status', 'label' => 'Status', 'class' => 'w-24'], ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]];
+    public $headerTrains = [['key' => 'ID_Kereta', 'label' => '#', 'class' => 'text-center w-3', 'sortable' => false], ['key' => 'nama_kereta', 'label' => 'Nama Kereta', 'class' => 'w-40'], ['key' => 'tipe', 'label' => 'Tipe', 'class' => 'w-32'], ['key' => 'kapasitas', 'label' => 'Kapasitas', 'class' => 'w-20 text-center'], ['key' => 'status', 'label' => 'Status', 'class' => 'w-24'], ['key' => 'actions', 'label' => 'Aksi', 'class' => 'w-24', 'sortable' => false]];
 
     // Filters
     public string $search = '';
@@ -104,7 +104,8 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Kereta')] class exten
                 ['id' => 'Ekonomi', 'name' => 'Ekonomi'],
             ]" icon="o-tag"
                 class="select-sm" option-value="id" option-label="name" />
-            <x-button icon="o-plus" class="btn-secondary btn-circle" />
+            <livewire:admin.kereta.add-kereta />
+            {{-- <livewire:admin.kereta.edit-kereta /> --}}
         </x-slot:actions>
     </x-header>
 
@@ -128,6 +129,10 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Kereta')] class exten
                 <x-slot:trigger>
                     <x-button icon="m-ellipsis-vertical" class="btn-circle" />
                 </x-slot:trigger>
+
+                <!-- changed: navigate to detail page (read-only) -->
+                <x-menu-item title="Detail" icon="o-eye" link="/admin/manajemen-kereta/{{ $train->ID_Kereta }}" />
+
                 <x-menu-item title="Edit" icon="o-pencil"
                     wire:click="$dispatch('showEditModal', { id: '{{ $train->ID_Kereta }}' })" />
 
@@ -156,4 +161,8 @@ new #[Layout('components.layouts.app')] #[Title('Manajemen Kereta')] class exten
             {{ $this->trains->links() }}
         </div>
     </div>
+
+    <!-- Di bagian atas halaman manajemen kereta -->
+    <livewire:admin.kereta.edit-kereta />
+    <livewire:admin.kereta.delete-kereta />
 </div>

@@ -8,6 +8,11 @@
     @vite('resources/js/app.js')
     @livewireStyles
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" crossorigin="">
     <title>{{ $title ?? 'Beranda' }}</title>
 </head>
 
@@ -21,7 +26,7 @@
             </label>
 
             {{-- Brand --}}
-            <div>App</div>
+            <div><img src="{{ asset('img/logo.svg') }}" width="50" alt=""></div>
         </x-slot:brand>
 
         {{-- Right side actions --}}
@@ -61,7 +66,8 @@
                         <!-- Data Master -->
                         <x-menu-sub title="Data Master" icon="o-circle-stack">
                             <x-menu-item title="Manajemen Kereta" icon="o-truck" link="/admin/manajemen-kereta" />
-                            <x-menu-item title="Manajemen Stasiun" icon="o-building-library" link="/admin/manajemen-stasiun" />
+                            <x-menu-item title="Manajemen Stasiun" icon="o-building-library"
+                                link="/admin/manajemen-stasiun" />
                             <x-menu-item title="Manajemen Rute" icon="o-map" link="/admin/manajemen-rute" />
                             <x-menu-item title="Manajemen Jadwal" icon="o-calendar" link="/admin/manajemen-jadwal" />
                         </x-menu-sub>
@@ -89,7 +95,7 @@
                             </x-menu-seb>
 
                             <x-menu-sub title="Pengaturan" icon="o-cog-6-tooth">
-                                <x-menu-item title="Akun Saya" icon="o-user" link="####" />
+                                <x-menu-item title="Profile" icon="o-user" link="####" />
                                 <livewire:auth.logout />
                             </x-menu-sub>
                             <!-- Pengaturan -->
@@ -103,7 +109,8 @@
                                 <x-menu-item title="Buat Jadwal Baru" icon="o-plus-circle"
                                     link="/admin/schedules/create" />
                                 <x-menu-item title="Update Harga" icon="o-currency-dollar" link="/admin/pricing" />
-                                <x-menu-item title="Broadcast Notifikasi" icon="o-megaphone" link="/admin/broadcast" />
+                                <x-menu-item title="Broadcast Notifikasi" icon="o-megaphone"
+                                    link="/admin/broadcast" />
                             </x-menu-sub>
                     @endif
 
@@ -115,7 +122,7 @@
                         <x-menu-item title="Kontak Kami" icon="o-phone" link="#" />
                         <x-menu-item title="Transaksi" icon="o-credit-card" link="#" />
                         <x-menu-sub title="Pengaturan" icon="o-cog-6-tooth">
-                            <x-menu-item title="Akun Saya" icon="o-user" link="####" />
+                            <x-menu-item title="Profile" icon="o-user" link="/profile" />
                             <livewire:auth.logout />
                         </x-menu-sub>
                     @endif
@@ -132,6 +139,9 @@
     {{-- Toast --}}
     <x-toast />
     @livewireScripts
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js" crossorigin=""></script>
 </body>
 
 </html>
